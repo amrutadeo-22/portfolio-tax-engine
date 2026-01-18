@@ -1,0 +1,16 @@
+
+{
+    "name": "Portfolio API (.NET 8)",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [5000],
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-dotnettools.csharp",
+          "ms-dotnettools.csdevkit"
+        ]
+      }
+    }
+}
