@@ -12,7 +12,7 @@ public class Transaction
     public decimal Quantity {get; private set;}
     public decimal Price {get; private set;}
     public DateTime TradeDate {get; private set;}
-
+    public int Sequence { get; private set; }
     private Transaction(){ } 
     private Transaction(
         Guid portfolioId,
@@ -20,7 +20,8 @@ public class Transaction
         TransactionType type,
         decimal quantity,
         decimal price, 
-        DateTime tradeDate
+        DateTime tradeDate,
+        int sequence
     ){
         if(quantity <= 0){
             throw new ArgumentException("Quantity must be greater than zero.");
@@ -35,9 +36,7 @@ public class Transaction
         Quantity = quantity;
         Price = price;
         TradeDate = tradeDate;
+        Sequence = sequence;
 
     }
-
-
-
 }
