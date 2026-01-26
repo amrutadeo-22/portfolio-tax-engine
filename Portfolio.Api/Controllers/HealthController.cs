@@ -12,7 +12,7 @@ public class HealthController : ControllerBase
         {
             status = "UP",
             service = "Portfolio Tax Engine",
-            timrstamp = DateTime.UtcNow
+            timestamp = DateTime.UtcNow
         });
     }
 }

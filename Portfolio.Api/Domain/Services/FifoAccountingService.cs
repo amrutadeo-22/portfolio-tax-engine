@@ -10,7 +10,18 @@ public class FifoAccountingService
         var result = new FifoResult();
         var PortfolioGroups = transactions.OrderBy(t => t.TradeDate).ThenBy(t => t.Sequence)
                             .GroupBy(t => t.PortfolioId);
+        var portfolioIds = transactions
+            .Select(t => t.PortfolioId)
+            .Distinct()
+            .ToList();
+
+        if (portfolioIds.Count == 0)
+            throw new DomainException("No transactions provided.");
         foreach (var portfolioGroup in PortfolioGroups){
+            if (!result.RemainingHoldingsPerPortfolio.ContainsKey(portfolioGroup.Key))
+            {
+                result.RemainingHoldingsPerPortfolio[portfolioGroup.Key] = new();
+            }
             var assetGroups = portfolioGroup.GroupBy(t => t.AssetSymbol);
             
             foreach(var assetGroup in assetGroups){
@@ -32,11 +43,14 @@ public class FifoAccountingService
                     
                 }
                 var remainingQty = taxLots.Sum(l => l.QuantityRemaining);
-                result.SetRemaining(
-                    portfolioGroup.Key,
-                    assetGroup.Key,
-                    remainingQty
-                );
+                if (remainingQty > 0)
+                {
+                    result.SetRemaining(
+                        portfolioGroup.Key,
+                        assetGroup.Key,
+                        remainingQty
+                    );
+                }
             }
             
         }
@@ -51,7 +65,7 @@ public class FifoAccountingService
         var sellQuantity = transaction.Quantity;
         while(sellQuantity > 0){
             if(taxLots.Count == 0){
-                throw new DomainExceptions(
+                throw new DomainException(
                     $"Oversell detected for asset {transaction.AssetSymbol} in portfolio {transaction.PortfolioId}"
                 );
             }

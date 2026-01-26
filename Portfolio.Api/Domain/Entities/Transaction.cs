@@ -39,4 +39,24 @@ public class Transaction
         Sequence = sequence;
 
     }
+    public static Transaction Create(
+    Guid portfolioId,
+    string assetSymbol,
+    TransactionType type,
+    decimal quantity,
+    decimal price,
+    DateTime tradeDate,
+    int sequence
+    )
+    {
+    return new Transaction(
+        portfolioId,
+        assetSymbol,
+        type,
+        quantity,
+        price,
+        tradeDate,
+        sequence
+    );
+    }
 }
