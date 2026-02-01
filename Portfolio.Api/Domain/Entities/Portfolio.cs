@@ -14,4 +14,9 @@ public class Portfolio
         BaseCurrency = baseCurrency;
         CreatedAt = DateTime.UtcNow;
     }
+
+    public static Portfolio Create(string name, string baseCurrency = "USD")
+    {
+        return new Portfolio(name, baseCurrency);
+    }
 }

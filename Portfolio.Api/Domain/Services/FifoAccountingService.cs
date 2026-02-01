@@ -17,6 +17,12 @@ public class FifoAccountingService
 
         if (portfolioIds.Count == 0)
             throw new DomainException("No transactions provided.");
+        if (transactions.GroupBy(t => new { t.PortfolioId, t.AssetSymbol, t.TradeDate, t.Sequence })
+            .Any(g => g.Count() > 1))
+        {
+            throw new DomainException("Duplicate sequence detected.");
+        }
+
         foreach (var portfolioGroup in PortfolioGroups){
             if (!result.RemainingHoldingsPerPortfolio.ContainsKey(portfolioGroup.Key))
             {
